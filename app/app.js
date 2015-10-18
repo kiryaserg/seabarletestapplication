@@ -121,6 +121,9 @@ function battleField(size){
         
           function checkCondition(s){
                      if(ship.type == 'h'){
+                         if(j+s < -1){
+                            return false;
+                        }
                         var min = i-1 <0?0:i-1;
                         var max = i+1 > GRID_SIZE-1?GRID_SIZE-1:i+1;
                         return (batleGrid[i][j+s] == 0 || batleGrid[i][j+s]==undefined)

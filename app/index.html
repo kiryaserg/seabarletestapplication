@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="seaBatle" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Seabatle 1.0</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body ng-controller="batleCtrl">
+  <div>Seabatle 1.0</div>
+  <div ng-drag-start="onDragStart($data,$event)" ng-drag-stop="onDragStop($data)" class="field" id='field' ng-drop="true" ng-drop-success="onDropComplete($data,$event)" style='width:{{fieldSideLength}}px; height: {{fieldSideLength}}px'>
+      <div ng-repeat="ceil in batleGrid"  class="ceil" id="{{ceil.row}}_{{ceil.column}}"></div>
+      <div ng-repeat="ship in batleShips" ng-drag="true"  ng-drag-data="ship" class="ship {{ship.type}}"  style="top:{{ship.top;}}px; left: {{ship.left}}px"></div>
+  </div>
+  <div class='ships' style='width:{{fieldSideLength}}px; height: {{fieldSideLength}}px'>
+        <!--<div  ng-repeat="ship in ships" class="ship {{ship.type}}" ng-click="ship.isDragging || addToBattleGrid($index,$event)"  ng-drag="true"  ng-drag-data="ship"  ng-hide="ship.count==0" ><span>{{ship.count}}</span></div>--> 
+         <div  ng-repeat="ship in ships" class="ship {{ship.type}}" ng-click="ship.isDragging || addToBattleGrid($index,$event)"   ng-drag-data="ship"  ng-hide="ship.count==0" ><span>{{ship.count}}</span></div> 
+  </div>
+
+  <script src="js/libs/angularjs-1.4.7/angular.js"></script>
+  <script src="js/libs/dragable/ngDraggable.js"></script>
+  <script src="app.js"></script>
+</body> 
+</html>

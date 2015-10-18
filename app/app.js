@@ -211,6 +211,7 @@ $scope.addShipToBattleGrid = function(ship){
     clone.canClone = false;
     $scope.addShipToField(clone,position);
     ship.count--;
+    return clone;
 };
 
 $scope.addShipToField  = function(ship,position){
@@ -221,17 +222,15 @@ $scope.addShipToField  = function(ship,position){
 };
 
  $scope.onDropComplete = function(ship,evt){
-      ship.isDragging = false;
+     ship.isDragging = false;
      if(!ship){
          return false;
      }
     var fieldPosition = GetCoordinates(evt, document.getElementById("field"));
-      if(ship.canClone){
-        $scope.addShipToBattleGrid(ship);
-    } 
+    if(ship.canClone){
+      ship = $scope.addShipToBattleGrid(ship);
+    }
 
-   // console.log(evt.x - evt.element.mouseX+ fieldPosition.PosX,evt.y - evt.element.mouseY + fieldPosition.PosY);
-    
     $scope.battleField.putShipOnABattlefield(
     (evt.x - evt.element.mouseX+ fieldPosition.PosX),
     (evt.y - evt.element.mouseY + fieldPosition.PosY),

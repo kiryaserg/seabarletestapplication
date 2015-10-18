@@ -18,8 +18,7 @@
       <div ng-repeat="ship in batleShips" ng-drag="true"  ng-drag-data="ship" class="ship {{ship.type}}"  style="top:{{ship.top;}}px; left: {{ship.left}}px"></div>
   </div>
   <div class='ships' style='width:{{fieldSideLength}}px; height: {{fieldSideLength}}px'>
-        <!--<div  ng-repeat="ship in ships" class="ship {{ship.type}}" ng-click="ship.isDragging || addToBattleGrid($index,$event)"  ng-drag="true"  ng-drag-data="ship"  ng-hide="ship.count==0" ><span>{{ship.count}}</span></div>--> 
-         <div  ng-repeat="ship in ships" class="ship {{ship.type}}" ng-click="ship.isDragging || addToBattleGrid($index,$event)"   ng-drag-data="ship"  ng-hide="ship.count==0" ><span>{{ship.count}}</span></div> 
+        <div ng-repeat="ship in ships" class="ship {{ship.type}}" ng-click="ship.isDragging || addToBattleGrid($index,$event)"  ng-drag="true"  ng-drag-data="ship"  ng-hide="ship.count==0" ><span>{{ship.count}}</span></div> 
   </div>
 
   <script src="js/libs/angularjs-1.4.7/angular.js"></script>

@@ -118,18 +118,39 @@ function battleField(size){
     
     var checkIsEmptyShipRect = function(i,j,batleGrid,ship){
         var empty = true;
+        
+          function checkCondition(s){
+                     if(ship.type == 'h'){
+                        var min = i-1 <0?0:i-1;
+                        var max = i+1 > GRID_SIZE-1?GRID_SIZE-1:i+1;
+                        return (batleGrid[i][j+s] == 0 || batleGrid[i][j+s]==undefined)
+                              && (batleGrid[max][j+s] == 0 || batleGrid[max][j+s]==undefined)
+                              && (batleGrid[min][j+s] == 0 || batleGrid[min][j+s]==undefined);
+                    }else{
+                        var min = j-1 <0?0:j-1;
+                        var max = j+1 > GRID_SIZE-1?GRID_SIZE-1:j+1;
+                        if(i+s < -1){
+                            return false;
+                        }
+                    
+                        var curimin = i+s <0?0:i+s;
+                         curimin = i+s > GRID_SIZE-1? GRID_SIZE-1:curimin;
+                        var tt = (batleGrid[curimin][j] == 0 || batleGrid[curimin][j]==undefined)
+                              && (batleGrid[curimin][max] == 0 || batleGrid[curimin][max]==undefined)
+                              && (batleGrid[curimin][min] == 0 || batleGrid[curimin][min]==undefined);
+                       
+                        return  (  batleGrid[curimin][j] == 0 || batleGrid[curimin][j]==undefined)
+                              && (batleGrid[curimin][max] == 0 || batleGrid[curimin][max]==undefined)
+                              && (batleGrid[curimin][min] == 0 || batleGrid[curimin][min]==undefined)
+                    }
+                };
+        
         for(var s = -1; s < ship.length+1; s++){
-                if( j+s > GRID_SIZE){
+                if((ship.type == 'h' && j+s > GRID_SIZE) || (ship.type == 'v' && i+s > GRID_SIZE)){
                     return false;
-                }
+                };
                 
-                var min = i-1 <0?0:i-1;
-                var max = i+1 > GRID_SIZE-1?GRID_SIZE-1:i+1;
-             
-                if((batleGrid[i][j+s] == 0 || batleGrid[i][j+s]==undefined)
-                && (batleGrid[max][j+s] == 0 || batleGrid[max][j+s]==undefined)
-                && (batleGrid[min][j+s] == 0 || batleGrid[min][j+s]==undefined)
-                ){
+                if(checkCondition(s)){
                       empty = true;
                 }else{
                     return false;
@@ -162,19 +183,25 @@ function battleField(size){
     };
 
     this.removeShipFromAGrid = function (ship){
-         var  gridPosition = positionToGrid(ship);
-         for(var i = gridPosition.x; i < gridPosition.x + ship.length;){
-            setPointToBatleGrid(i,gridPosition.y,0);
-            i++;
+          setPointsToAGrid(ship,0);
+    };
+    
+    var setPointsToAGrid = function(ship,data){
+        var  gridPosition = positionToGrid(ship);
+        if(ship.type == 'h'){
+            for(var i = gridPosition.x; i < gridPosition.x + ship.length;){
+                setPointToBatleGrid(i,gridPosition.y,data);
+                i++;
+            }
+        }else{
+            for(var i = gridPosition.y; i < gridPosition.y + ship.length;){
+                setPointToBatleGrid(gridPosition.x,i,data);
+                i++;
+            }
         }
     };
-
     this.addShipToGrid = function (ship){
-        var  gridPosition = positionToGrid(ship);
-        for(var i = gridPosition.x; i < gridPosition.x + ship.length;){
-            setPointToBatleGrid(i,gridPosition.y,1);
-            i++;
-        }
+        setPointsToAGrid(ship,1);
     }.bind(this);
 
     this.putShipOnABattlefield = function (x,y,ship){
@@ -195,10 +222,10 @@ app.controller('batleCtrl', function($scope){
     $scope.batleShips = [];
     $scope.draggableObjects =  $scope.ships;
     $scope.ships = [
-        {type:'s4',count:1, length:4, top:0, left:0, canClone: true, isDragging:false},
-        {type:'s3',count:2, length:3, top:0, left:0, canClone:true , isDragging:false},
-        {type:'s2',count:3, length:2, top:0, left:0, canClone:true, isDragging:false},
-        {type:'s1',count:4, length:1, top:0, left:0, canClone:true, isDragging:false}
+        {type:'v',count:1, length:4, top:0, left:0, canClone: true, isDragging:false },
+        {type:'h',count:2, length:3, top:0, left:0, canClone:true , isDragging:false },
+        {type:'h',count:3, length:2, top:0, left:0, canClone:true, isDragging:false},
+        {type:'h',count:4, length:1, top:0, left:0, canClone:true, isDragging:false}
     ];
 
 $scope.addToBattleGrid = function(index){
@@ -222,6 +249,7 @@ $scope.addShipToField  = function(ship,position){
 };
 
  $scope.onDropComplete = function(ship,evt){
+     if(!ship){return false}
      ship.isDragging = false;
      if(!ship){
          return false;
@@ -231,7 +259,7 @@ $scope.addShipToField  = function(ship,position){
       ship = $scope.addShipToBattleGrid(ship);
     }
 
-    $scope.battleField.putShipOnABattlefield(
+     $scope.battleField.putShipOnABattlefield(
     (evt.x - evt.element.mouseX+ fieldPosition.PosX),
     (evt.y - evt.element.mouseY + fieldPosition.PosY),
     ship
@@ -247,6 +275,16 @@ $scope.onDragStop =  function(ship,evt){
        return false;
    }
     ship.isDragging = false;
+};
+
+$scope.rotate = function(ship){
+     $scope.battleField.removeShipFromAGrid(ship);
+     ship.type = (ship.type=='v')?'h':'v';
+     $scope.battleField.putShipOnABattlefield(
+     ship.left,
+     ship.top,
+     ship
+        );
 };
 
 });

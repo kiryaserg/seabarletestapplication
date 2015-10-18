@@ -15,10 +15,10 @@
   <div>Seabatle 1.0</div>
   <div ng-drag-start="onDragStart($data,$event)" ng-drag-stop="onDragStop($data)" class="field" id='field' ng-drop="true" ng-drop-success="onDropComplete($data,$event)" style='width:{{fieldSideLength}}px; height: {{fieldSideLength}}px'>
       <div ng-repeat="ceil in batleGrid"  class="ceil" id="{{ceil.row}}_{{ceil.column}}"></div>
-      <div ng-repeat="ship in batleShips" ng-drag="true"  ng-drag-data="ship" class="ship {{ship.type}}"  style="top:{{ship.top;}}px; left: {{ship.left}}px"></div>
+      <div ng-repeat="ship in batleShips" ng-drag="true" ng-dblclick="rotate(ship)"  ng-drag-data="ship" class="ship {{ship.type}}{{ship.length}}"  style="top:{{ship.top;}}px; left: {{ship.left}}px"></div>
   </div>
   <div class='ships' style='width:{{fieldSideLength}}px; height: {{fieldSideLength}}px'>
-        <div ng-repeat="ship in ships" class="ship {{ship.type}}" ng-click="ship.isDragging || addToBattleGrid($index,$event)"  ng-drag="true"  ng-drag-data="ship"  ng-hide="ship.count==0" ><span>{{ship.count}}</span></div> 
+        <div ng-repeat="ship in ships" class="ship {{ship.type}}{{ship.length}}" ng-click="ship.isDragging || addToBattleGrid($index,$event)"  ng-drag="true"  ng-drag-data="ship"  ng-hide="ship.count==0" ><span>{{ship.count}}</span></div> 
   </div>
 
   <script src="js/libs/angularjs-1.4.7/angular.js"></script>
